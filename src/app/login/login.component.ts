@@ -7,6 +7,7 @@ import {
 import { UserService } from '../shared/service/user/user.service';
 import { User } from '../shared/service/user/user';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
+import { AppConfig } from "../app.config";
 
 @Component({
   selector: 'ph-login',
@@ -28,13 +29,16 @@ export class LoginComponent implements OnInit, OnDestroy {
   public linkedin_link = 'https://www.linkedin.com';
   private previousUrl: string;
   private returnUrl: string;
+  private tokenTTL: number;
 
   constructor(private applicationService: ApplicationService,
               private authService: AuthService,
+              private config: AppConfig,
               public credentialService: CredentialService,
               public userService: UserService,
               private route: ActivatedRoute,
               private router: Router) {
+    this.tokenTTL = config.getConfig("token_ttl");
   }
 
   ngOnInit() {
@@ -86,7 +90,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ssoLink() {
-    console.log("SSO link: " + this.authService.ssoLink());
-    return this.authService.ssoLink();
+    return this.authService.ssoLink() + '&ttl=' + this.tokenTTL;
   }
 }
