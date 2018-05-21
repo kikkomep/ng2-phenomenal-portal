@@ -85,7 +85,6 @@ export class ProviderRegistry {
     };
   }
 
-  public static getGooglProvider(): CloudProvider {
     return <CloudProvider>{
       title: 'Google Cloud Platform',
       name: 'gcp',
@@ -116,8 +115,8 @@ export class ProviderRegistry {
     return [
       this.getPhenomenalProvider(),
       this.getAwsProvider(),
-      this.getGooglProvider(),
-      this.getOpenStackProvider()
+      this.getGoogleProvider(),
+      this.getOpenStackProvider(),
     ];
   }
 }
