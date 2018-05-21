@@ -5,6 +5,7 @@ export class ProviderRegistry {
   private static _openstack_logo = 'assets/img/logo/openstack_logo.png';
   private static _aws_logo = 'assets/img/logo/aws_logo.png';
   private static _gce_logo = 'assets/img/logo/gce_logo.png';
+  private static _csc_logo = 'assets/img/logo/csc_logo.png';
 
   public static getPhenomenalProvider(): CloudProvider {
     return <CloudProvider>{
