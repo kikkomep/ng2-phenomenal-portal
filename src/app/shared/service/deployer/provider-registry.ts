@@ -87,6 +87,32 @@ export class ProviderRegistry {
     };
   }
 
+
+  public static getOpenStackCsCProvider(): CloudProvider {
+    return <CloudProvider>{
+      title: 'CSC - IT Center for Science',
+      name: 'ostack',
+      help: '/help/How-to-obtain-OpenStack-credentials',
+      description: 'CSC - IT Center for Science Ltd. is a non-profit, state-owned company administered by the Finnish Ministry of Education and Culture. CSC maintains and develops the state-owned centralised IT infrastructure to provide nationwide IT services.',
+      paymentDescription: 'Free',
+      providerDescription: 'Sweden',
+      locationDescription: 'Sweden',
+      logo: this._csc_logo,
+      isSelected: 0,
+      credential: {
+        username: '',
+        password: '',
+        tenant_name: '',
+        url: '',
+        provider: 'OSTACK',
+        galaxy_admin_username: '',
+        galaxy_admin_email: '',
+        galaxy_admin_password: '',
+        jupyter_password: ''
+      }
+    };
+  }
+
     return <CloudProvider>{
       title: 'Google Cloud Platform',
       name: 'gcp',
@@ -119,6 +145,7 @@ export class ProviderRegistry {
       this.getAwsProvider(),
       this.getGoogleProvider(),
       this.getOpenStackProvider(),
+      this.getOpenStackCsCProvider(),
     ];
   }
 }
