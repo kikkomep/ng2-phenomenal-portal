@@ -113,6 +113,32 @@ export class ProviderRegistry {
     };
   }
 
+  public static getOpenStackSnicProvider(): CloudProvider {
+    return <CloudProvider>{
+      title: 'Swedish National Infrastructure for Computing',
+      name: 'ostack',
+      help: '/help/How-to-obtain-OpenStack-credentials',
+      description: 'The Swedish National Infrastructure for Computing (SNIC) is a national research infrastructure that makes available large scale high performance computing resources, storage capacity, and advanced user support, for Swedish researchers.',
+      paymentDescription: 'Free',
+      providerDescription: 'Sweden',
+      locationDescription: 'Sweden',
+      logo: this._snic_logo,
+      isSelected: 0,
+      credential: {
+        username: '',
+        password: '',
+        tenant_name: '',
+        url: '',
+        provider: 'OSTACK',
+        galaxy_admin_username: '',
+        galaxy_admin_email: '',
+        galaxy_admin_password: '',
+        jupyter_password: ''
+      }
+    };
+  }
+
+  public static getGoogleProvider(): CloudProvider {
     return <CloudProvider>{
       title: 'Google Cloud Platform',
       name: 'gcp',
@@ -146,6 +172,7 @@ export class ProviderRegistry {
       this.getGoogleProvider(),
       this.getOpenStackProvider(),
       this.getOpenStackCsCProvider(),
+      this.getOpenStackSnicProvider()
     ];
   }
 }
