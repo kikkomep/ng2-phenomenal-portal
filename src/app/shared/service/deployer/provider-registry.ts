@@ -91,7 +91,7 @@ export class ProviderRegistry {
   public static getOpenStackCsCProvider(): CloudProvider {
     return <CloudProvider>{
       title: 'CSC - IT Center for Science',
-      name: 'ostack',
+      name: 'ostack-csc',
       help: '/help/How-to-obtain-OpenStack-credentials',
       description: 'CSC - IT Center for Science Ltd. is a non-profit, state-owned company administered by the Finnish Ministry of Education and Culture. CSC maintains and develops the state-owned centralised IT infrastructure to provide nationwide IT services.',
       paymentDescription: 'Free',
@@ -104,7 +104,7 @@ export class ProviderRegistry {
         password: '',
         tenant_name: '',
         url: '',
-        provider: 'OSTACK',
+        provider: 'OSTACK-CSC',
         galaxy_admin_username: '',
         galaxy_admin_email: '',
         galaxy_admin_password: '',
@@ -116,7 +116,7 @@ export class ProviderRegistry {
   public static getOpenStackSnicProvider(): CloudProvider {
     return <CloudProvider>{
       title: 'Swedish National Infrastructure for Computing',
-      name: 'ostack',
+      name: 'ostack-snic',
       help: '/help/How-to-obtain-OpenStack-credentials',
       description: 'The Swedish National Infrastructure for Computing (SNIC) is a national research infrastructure that makes available large scale high performance computing resources, storage capacity, and advanced user support, for Swedish researchers.',
       paymentDescription: 'Free',
@@ -129,7 +129,7 @@ export class ProviderRegistry {
         password: '',
         tenant_name: '',
         url: '',
-        provider: 'OSTACK',
+        provider: 'OSTACK-SNIC',
         galaxy_admin_username: '',
         galaxy_admin_email: '',
         galaxy_admin_password: '',
