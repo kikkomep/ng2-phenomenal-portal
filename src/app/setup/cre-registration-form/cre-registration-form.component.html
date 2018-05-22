@@ -27,7 +27,9 @@
 
     <div class="mat-card-control-buttons"
          *ngIf="cloudProvider.isSelected === 2 && (!_isSuccess || cloudProvider.name !== 'phenomenal')">
-      <button mat-raised-button (click)="cloudProvider.isSelected=1;"
+      <button mat-raised-button
+              (click)="(cloudProvider.name === 'ostack-csc' || cloudProvider.name === 'ostack-snic')
+                        ? cloudProvider.isSelected=0 : cloudProvider.isSelected=1;"
               class="btn btn-primary" color="primary">
         Back
       </button>
@@ -73,6 +75,9 @@
       <div *ngIf="cloudProvider.name === 'ostack'">
         <p>Tenant Name: <b>{{cloudProvider.credential.tenant_name}}</b></p>
         <p>Auth URL: <b>{{cloudProvider.credential.url}}</b></p>
+        <p>Galaxy Email: <b>{{currentUser.email}}</b></p>
+      </div>
+      <div *ngIf="cloudProvider.name.startsWith('ostack-')">
         <p>Galaxy Email: <b>{{currentUser.email}}</b></p>
       </div>
       <div *ngIf="cloudProvider.name === 'aws'">

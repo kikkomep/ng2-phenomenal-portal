@@ -30,6 +30,12 @@ export class CloudSetupComponent implements OnInit {
       console.log("Updated user @ CloudSetupComponent", user, this.user)
     });
     console.log("Cloud provider user", this.user);
+
+    // handle "special providers
+    if(this.cloudProvider.name==="ostack-csc" || this.cloudProvider.name==="ostack-snic"){
+      // skip credentials choose
+      this.cloudProvider.isSelected=2;
+    }
   }
 
 
