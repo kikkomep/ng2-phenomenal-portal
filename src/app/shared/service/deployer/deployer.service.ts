@@ -300,13 +300,155 @@ export class DeployerService implements OnInit, OnDestroy {
           {'key': 'TF_VAR_dashboard_password', 'value': credential.galaxy_admin_password}
         ]
       };
-    } else {
+    } else if (credential.provider === 'OSTACK') {
       let cc: OpenStackCredentials = this.providerMetadataService.parseRcFile(credential.rc_file, credential.password);
       applicationDeployer = <ApplicationDeployer> {
         name: 'Phenomenal VRE',
         accountUsername: username,
         repoUri: this.repoUrl,
         selectedCloudProvider: 'OSTACK'
+      };
+      applicationDeployer.attachedVolumes = {};
+      applicationDeployer.assignedInputs = {
+        cluster_prefix: name,
+        floating_ip_pool: credential.ip_pool,
+        external_network_uuid: credential.network,
+        master_as_edge: 'true',
+        master_flavor: credential.flavor,
+        node_count: '2',
+        node_flavor: credential.flavor,
+        glusternode_count: '1',
+        glusternode_flavor: credential.flavor,
+        glusternode_extra_disk_size: '100',
+        phenomenal_pvc_size: '90Gi',
+        galaxy_admin_email: credential.galaxy_admin_email,
+        galaxy_admin_password: credential.galaxy_admin_password
+        // jupyter_password: credential.galaxy_admin_password,
+        // dashboard_username: credential.galaxy_admin_email,
+        // dashboard_password: credential.galaxy_admin_password
+      };
+      applicationDeployer.assignedParameters = {};
+      applicationDeployer.configurations = [];
+      selectedCloudProvider = {
+        name: name + '-' + credential.provider,
+        accountUsername: username,
+        cloudProvider: 'OSTACK',
+        fields: [
+          {'key': 'OS_USERNAME', 'value': credential.username},
+          {'key': 'OS_TENANT_NAME', 'value': credential.tenant_name},
+          {'key': 'OS_AUTH_URL', 'value': credential.url},
+          {'key': 'OS_PASSWORD', 'value': credential.password},
+          {'key': 'OS_PROJECT_NAME', 'value': credential.tenant_name},
+          {'key': 'OS_RC_FILE', 'value': btoa(cc.rcFile)},
+          {'key': 'TF_VAR_galaxy_admin_email', 'value': credential.galaxy_admin_email},
+          {'key': 'TF_VAR_galaxy_admin_password', 'value': credential.galaxy_admin_password},
+          {'key': 'TF_VAR_jupyter_password', 'value': credential.galaxy_admin_password},
+          {'key': 'TF_VAR_dashboard_username', 'value': credential.galaxy_admin_email},
+          {'key': 'TF_VAR_dashboard_password', 'value': credential.galaxy_admin_password},
+          {'key': 'TF_VAR_floating_ip_pool', 'value': credential.ip_pool},
+          {'key': 'TF_VAR_external_network_uuid', 'value': credential.network}
+        ],
+        sharedWithAccountEmails: [],
+        sharedWithTeamNames: [],
+        reference: ''
+      };
+      value = {
+        'name': name + '-' + credential.provider,
+        'cloudProvider': credential.provider,
+        'fields': [
+          {'key': 'OS_USERNAME', 'value': credential.username},
+          {'key': 'OS_TENANT_NAME', 'value': credential.tenant_name},
+          {'key': 'OS_AUTH_URL', 'value': credential.url},
+          {'key': 'OS_PASSWORD', 'value': credential.password},
+          {'key': 'OS_PROJECT_NAME', 'value': credential.tenant_name},
+          {'key': 'OS_RC_FILE', 'value': btoa(cc.rcFile)},
+          {'key': 'TF_VAR_galaxy_admin_email', 'value': credential.galaxy_admin_email},
+          {'key': 'TF_VAR_galaxy_admin_password', 'value': credential.galaxy_admin_password},
+          {'key': 'TF_VAR_jupyter_password', 'value': credential.galaxy_admin_password},
+          {'key': 'TF_VAR_dashboard_username', 'value': credential.galaxy_admin_email},
+          {'key': 'TF_VAR_dashboard_password', 'value': credential.galaxy_admin_password},
+          {'key': 'TF_VAR_floating_ip_pool', 'value': credential.ip_pool},
+          {'key': 'TF_VAR_external_network_uuid', 'value': credential.network}
+        ]
+      };
+    } else if (credential.provider === 'OSTACK-CSC') {
+      let cc: OpenStackCredentials = this.providerMetadataService.parseRcFile(credential.rc_file, credential.password);
+      applicationDeployer = <ApplicationDeployer> {
+        name: 'Phenomenal VRE',
+        accountUsername: username,
+        repoUri: this.repoUrl,
+        selectedCloudProvider: 'OSTACK-CSC'
+      };
+      applicationDeployer.attachedVolumes = {};
+      applicationDeployer.assignedInputs = {
+        cluster_prefix: name,
+        floating_ip_pool: credential.ip_pool,
+        external_network_uuid: credential.network,
+        master_as_edge: 'true',
+        master_flavor: credential.flavor,
+        node_count: '2',
+        node_flavor: credential.flavor,
+        glusternode_count: '1',
+        glusternode_flavor: credential.flavor,
+        glusternode_extra_disk_size: '100',
+        phenomenal_pvc_size: '90Gi',
+        galaxy_admin_email: credential.galaxy_admin_email,
+        galaxy_admin_password: credential.galaxy_admin_password
+        // jupyter_password: credential.galaxy_admin_password,
+        // dashboard_username: credential.galaxy_admin_email,
+        // dashboard_password: credential.galaxy_admin_password
+      };
+      applicationDeployer.assignedParameters = {};
+      applicationDeployer.configurations = [];
+      selectedCloudProvider = {
+        name: name + '-' + credential.provider,
+        accountUsername: username,
+        cloudProvider: 'OSTACK',
+        fields: [
+          {'key': 'OS_USERNAME', 'value': credential.username},
+          {'key': 'OS_TENANT_NAME', 'value': credential.tenant_name},
+          {'key': 'OS_AUTH_URL', 'value': credential.url},
+          {'key': 'OS_PASSWORD', 'value': credential.password},
+          {'key': 'OS_PROJECT_NAME', 'value': credential.tenant_name},
+          {'key': 'OS_RC_FILE', 'value': btoa(cc.rcFile)},
+          {'key': 'TF_VAR_galaxy_admin_email', 'value': credential.galaxy_admin_email},
+          {'key': 'TF_VAR_galaxy_admin_password', 'value': credential.galaxy_admin_password},
+          {'key': 'TF_VAR_jupyter_password', 'value': credential.galaxy_admin_password},
+          {'key': 'TF_VAR_dashboard_username', 'value': credential.galaxy_admin_email},
+          {'key': 'TF_VAR_dashboard_password', 'value': credential.galaxy_admin_password},
+          {'key': 'TF_VAR_floating_ip_pool', 'value': credential.ip_pool},
+          {'key': 'TF_VAR_external_network_uuid', 'value': credential.network}
+        ],
+        sharedWithAccountEmails: [],
+        sharedWithTeamNames: [],
+        reference: ''
+      };
+      value = {
+        'name': name + '-' + credential.provider,
+        'cloudProvider': credential.provider,
+        'fields': [
+          {'key': 'OS_USERNAME', 'value': credential.username},
+          {'key': 'OS_TENANT_NAME', 'value': credential.tenant_name},
+          {'key': 'OS_AUTH_URL', 'value': credential.url},
+          {'key': 'OS_PASSWORD', 'value': credential.password},
+          {'key': 'OS_PROJECT_NAME', 'value': credential.tenant_name},
+          {'key': 'OS_RC_FILE', 'value': btoa(cc.rcFile)},
+          {'key': 'TF_VAR_galaxy_admin_email', 'value': credential.galaxy_admin_email},
+          {'key': 'TF_VAR_galaxy_admin_password', 'value': credential.galaxy_admin_password},
+          {'key': 'TF_VAR_jupyter_password', 'value': credential.galaxy_admin_password},
+          {'key': 'TF_VAR_dashboard_username', 'value': credential.galaxy_admin_email},
+          {'key': 'TF_VAR_dashboard_password', 'value': credential.galaxy_admin_password},
+          {'key': 'TF_VAR_floating_ip_pool', 'value': credential.ip_pool},
+          {'key': 'TF_VAR_external_network_uuid', 'value': credential.network}
+        ]
+      };
+    } else if (credential.provider === 'OSTACK-SNIC') {
+      let cc: OpenStackCredentials = this.providerMetadataService.parseRcFile(credential.rc_file, credential.password);
+      applicationDeployer = <ApplicationDeployer> {
+        name: 'Phenomenal VRE',
+        accountUsername: username,
+        repoUri: this.repoUrl,
+        selectedCloudProvider: 'OSTACK-SNIC'
       };
       applicationDeployer.attachedVolumes = {};
       applicationDeployer.assignedInputs = {
