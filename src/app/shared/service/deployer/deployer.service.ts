@@ -59,6 +59,7 @@ export class DeployerService implements OnInit, OnDestroy {
     if (reload || !this.lastLoadedDeploymentList) {
       this.loadDeployments(true).subscribe(
         (deployments) => {
+          console.log("All deployments...", deployments);
           this.observableDeploymentList.next(deployments);
         },
         (error) => {
@@ -102,6 +103,17 @@ export class DeployerService implements OnInit, OnDestroy {
           deployment.configuration = <DeploymentConfiguration>{
             provider: deployment.cloudProviderParametersCopy
           };
+
+          // process special
+          deployment.assignedInputs.filter((property) => {
+            console.log("Property name", property);
+            if (property.inputName === "preset") {
+              deployment.configuration.provider.cloudProvider =
+                property.assignedValue.indexOf("csc") >= 0 ? "CSC" : "SNIC";
+            }
+          });
+
+          console.log("Check Cloud PROVIDER", deployment.configuration.provider.cloudProvider);
 
           if (logs) {
             this._deploymentService.getDeploymentLogs(
@@ -372,24 +384,25 @@ export class DeployerService implements OnInit, OnDestroy {
         ]
       };
     } else if (credential.provider === 'OSTACK-CSC') {
-      let cc: OpenStackCredentials = this.providerMetadataService.parseRcFile(credential.rc_file, credential.password);
+      // let cc: OpenStackCredentials = this.providerMetadataService.parseRcFile(credential.rc_file, credential.password);
       applicationDeployer = <ApplicationDeployer> {
         name: 'Phenomenal VRE',
         accountUsername: username,
         repoUri: this.repoUrl,
-        selectedCloudProvider: 'OSTACK-CSC'
+        selectedCloudProvider: 'OSTACK'
       };
       applicationDeployer.attachedVolumes = {};
       applicationDeployer.assignedInputs = {
+        preset: "csc-glenna",
         cluster_prefix: name,
-        floating_ip_pool: credential.ip_pool,
-        external_network_uuid: credential.network,
+        floating_ip_pool: "public",
+        external_network_uuid: "26f9344a-2e81-4ef5-a018-7d20cff891ee",
         master_as_edge: 'true',
-        master_flavor: credential.flavor,
+        master_flavor: "standard.medium",
         node_count: '2',
-        node_flavor: credential.flavor,
+        node_flavor: "standard.medium",
         glusternode_count: '1',
-        glusternode_flavor: credential.flavor,
+        glusternode_flavor: "standard.medium",
         glusternode_extra_disk_size: '100',
         phenomenal_pvc_size: '90Gi',
         galaxy_admin_email: credential.galaxy_admin_email,
@@ -405,19 +418,19 @@ export class DeployerService implements OnInit, OnDestroy {
         accountUsername: username,
         cloudProvider: 'OSTACK',
         fields: [
+          {'key': 'OS_PRESET', 'value': "csc-glenna"},
           {'key': 'OS_USERNAME', 'value': credential.username},
           {'key': 'OS_TENANT_NAME', 'value': credential.tenant_name},
           {'key': 'OS_AUTH_URL', 'value': credential.url},
           {'key': 'OS_PASSWORD', 'value': credential.password},
           {'key': 'OS_PROJECT_NAME', 'value': credential.tenant_name},
-          {'key': 'OS_RC_FILE', 'value': btoa(cc.rcFile)},
           {'key': 'TF_VAR_galaxy_admin_email', 'value': credential.galaxy_admin_email},
           {'key': 'TF_VAR_galaxy_admin_password', 'value': credential.galaxy_admin_password},
           {'key': 'TF_VAR_jupyter_password', 'value': credential.galaxy_admin_password},
           {'key': 'TF_VAR_dashboard_username', 'value': credential.galaxy_admin_email},
           {'key': 'TF_VAR_dashboard_password', 'value': credential.galaxy_admin_password},
-          {'key': 'TF_VAR_floating_ip_pool', 'value': credential.ip_pool},
-          {'key': 'TF_VAR_external_network_uuid', 'value': credential.network}
+          {'key': 'TF_VAR_floating_ip_pool', 'value': "public"},
+          {'key': 'TF_VAR_external_network_uuid', 'value': "26f9344a-2e81-4ef5-a018-7d20cff891ee"}
         ],
         sharedWithAccountEmails: [],
         sharedWithTeamNames: [],
@@ -425,42 +438,43 @@ export class DeployerService implements OnInit, OnDestroy {
       };
       value = {
         'name': name + '-' + credential.provider,
-        'cloudProvider': credential.provider,
+        'cloudProvider': 'OSTACK',
         'fields': [
+          {'key': 'OS_PRESET', 'value': "csc-glenna"},
           {'key': 'OS_USERNAME', 'value': credential.username},
           {'key': 'OS_TENANT_NAME', 'value': credential.tenant_name},
           {'key': 'OS_AUTH_URL', 'value': credential.url},
           {'key': 'OS_PASSWORD', 'value': credential.password},
           {'key': 'OS_PROJECT_NAME', 'value': credential.tenant_name},
-          {'key': 'OS_RC_FILE', 'value': btoa(cc.rcFile)},
           {'key': 'TF_VAR_galaxy_admin_email', 'value': credential.galaxy_admin_email},
           {'key': 'TF_VAR_galaxy_admin_password', 'value': credential.galaxy_admin_password},
           {'key': 'TF_VAR_jupyter_password', 'value': credential.galaxy_admin_password},
           {'key': 'TF_VAR_dashboard_username', 'value': credential.galaxy_admin_email},
           {'key': 'TF_VAR_dashboard_password', 'value': credential.galaxy_admin_password},
-          {'key': 'TF_VAR_floating_ip_pool', 'value': credential.ip_pool},
-          {'key': 'TF_VAR_external_network_uuid', 'value': credential.network}
+          {'key': 'TF_VAR_floating_ip_pool', 'value': "public"},
+          {'key': 'TF_VAR_external_network_uuid', 'value': "26f9344a-2e81-4ef5-a018-7d20cff891ee"}
         ]
       };
     } else if (credential.provider === 'OSTACK-SNIC') {
-      let cc: OpenStackCredentials = this.providerMetadataService.parseRcFile(credential.rc_file, credential.password);
+      // let cc: OpenStackCredentials = this.providerMetadataService.parseRcFile(credential.rc_file, credential.password);
       applicationDeployer = <ApplicationDeployer> {
         name: 'Phenomenal VRE',
         accountUsername: username,
         repoUri: this.repoUrl,
-        selectedCloudProvider: 'OSTACK-SNIC'
+        selectedCloudProvider: 'OSTACK'
       };
       applicationDeployer.attachedVolumes = {};
       applicationDeployer.assignedInputs = {
+        preset: 'ssc-uppmax',
         cluster_prefix: name,
-        floating_ip_pool: credential.ip_pool,
-        external_network_uuid: credential.network,
+        floating_ip_pool: "Public External IPv4 network",
+        external_network_uuid: "af006ff3-d68a-4722-a056-0f631c5a0039",
         master_as_edge: 'true',
-        master_flavor: credential.flavor,
+        master_flavor: "ssc.large",
         node_count: '2',
-        node_flavor: credential.flavor,
+        node_flavor: "ssc.large",
         glusternode_count: '1',
-        glusternode_flavor: credential.flavor,
+        glusternode_flavor: "ssc.large",
         glusternode_extra_disk_size: '100',
         phenomenal_pvc_size: '90Gi',
         galaxy_admin_email: credential.galaxy_admin_email,
@@ -476,19 +490,19 @@ export class DeployerService implements OnInit, OnDestroy {
         accountUsername: username,
         cloudProvider: 'OSTACK',
         fields: [
+          {'key': 'OS_PRESET', 'value': "ssc-uppmax"},
           {'key': 'OS_USERNAME', 'value': credential.username},
           {'key': 'OS_TENANT_NAME', 'value': credential.tenant_name},
           {'key': 'OS_AUTH_URL', 'value': credential.url},
           {'key': 'OS_PASSWORD', 'value': credential.password},
           {'key': 'OS_PROJECT_NAME', 'value': credential.tenant_name},
-          {'key': 'OS_RC_FILE', 'value': btoa(cc.rcFile)},
           {'key': 'TF_VAR_galaxy_admin_email', 'value': credential.galaxy_admin_email},
           {'key': 'TF_VAR_galaxy_admin_password', 'value': credential.galaxy_admin_password},
           {'key': 'TF_VAR_jupyter_password', 'value': credential.galaxy_admin_password},
           {'key': 'TF_VAR_dashboard_username', 'value': credential.galaxy_admin_email},
           {'key': 'TF_VAR_dashboard_password', 'value': credential.galaxy_admin_password},
-          {'key': 'TF_VAR_floating_ip_pool', 'value': credential.ip_pool},
-          {'key': 'TF_VAR_external_network_uuid', 'value': credential.network}
+          {'key': 'TF_VAR_floating_ip_pool', 'value': "Public External IPv4 network"},
+          {'key': 'TF_VAR_external_network_uuid', 'value': "af006ff3-d68a-4722-a056-0f631c5a0039"}
         ],
         sharedWithAccountEmails: [],
         sharedWithTeamNames: [],
@@ -496,24 +510,27 @@ export class DeployerService implements OnInit, OnDestroy {
       };
       value = {
         'name': name + '-' + credential.provider,
-        'cloudProvider': credential.provider,
+        'cloudProvider': 'OSTACK',
         'fields': [
+          {'key': 'OS_PRESET', 'value': "ssc-uppmax"},
           {'key': 'OS_USERNAME', 'value': credential.username},
           {'key': 'OS_TENANT_NAME', 'value': credential.tenant_name},
           {'key': 'OS_AUTH_URL', 'value': credential.url},
           {'key': 'OS_PASSWORD', 'value': credential.password},
           {'key': 'OS_PROJECT_NAME', 'value': credential.tenant_name},
-          {'key': 'OS_RC_FILE', 'value': btoa(cc.rcFile)},
           {'key': 'TF_VAR_galaxy_admin_email', 'value': credential.galaxy_admin_email},
           {'key': 'TF_VAR_galaxy_admin_password', 'value': credential.galaxy_admin_password},
           {'key': 'TF_VAR_jupyter_password', 'value': credential.galaxy_admin_password},
           {'key': 'TF_VAR_dashboard_username', 'value': credential.galaxy_admin_email},
           {'key': 'TF_VAR_dashboard_password', 'value': credential.galaxy_admin_password},
-          {'key': 'TF_VAR_floating_ip_pool', 'value': credential.ip_pool},
-          {'key': 'TF_VAR_external_network_uuid', 'value': credential.network}
+          {'key': 'TF_VAR_floating_ip_pool', 'value': "Public External IPv4 network"},
+          {'key': 'TF_VAR_external_network_uuid', 'value': "af006ff3-d68a-4722-a056-0f631c5a0039"}
         ]
       };
     }
+
+    // TODO: just for debugging... remove me !!!
+    console.log("Values", value);
 
     if (this.use_https) {
       value.fields.push({'key': 'TF_VAR_cloudflare_proxied', 'value': true});
