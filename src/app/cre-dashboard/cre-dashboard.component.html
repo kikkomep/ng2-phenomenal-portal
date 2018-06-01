@@ -51,6 +51,10 @@
                      src="{{gce_logo}}" class="provider-image">
                 <img *ngIf="deployment.configuration.provider.cloudProvider === 'OSTACK'" mat-card-image
                      src="{{openstack_logo}}" class="provider-image">
+                <img *ngIf="deployment.configuration.provider.cloudProvider === 'SNIC'" mat-card-image
+                     src="{{snic_logo}}" class="provider-image">
+                <img *ngIf="deployment.configuration.provider.cloudProvider === 'CSC'" mat-card-image
+                     src="{{csc_logo}}" class="provider-image">
               </div>
 
               <div class="deployment-identifiers">

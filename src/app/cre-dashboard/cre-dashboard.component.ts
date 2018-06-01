@@ -31,6 +31,8 @@ export class CreDashboardComponent implements OnInit, OnDestroy {
   private _openstack_logo = 'assets/img/logo/openstack_logo.png';
   private _aws_logo = 'assets/img/logo/aws_logo.png';
   private _gce_logo = 'assets/img/logo/gce_logo.png';
+  private _snic_logo = 'assets/img/logo/snic_logo.png';
+  private _csc_logo = 'assets/img/logo/csc_logo.png';
 
   public galaxy_logo = 'assets/img/logo/galaxy_square.png';
   public luigi_logo = 'assets/img/logo/luigi.png';
@@ -52,6 +54,14 @@ export class CreDashboardComponent implements OnInit, OnDestroy {
 
   get aws_logo(): string {
     return this._aws_logo;
+  }
+
+  get snic_logo(): string {
+    return this._snic_logo;
+  }
+
+  get csc_logo(): string {
+    return this._csc_logo;
   }
 
 
